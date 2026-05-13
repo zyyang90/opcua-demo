@@ -1,0 +1,23 @@
+{
+  "name": "opcua-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "ae-explore/server.js",
+  "scripts": {
+    "ae-server": "node ae-explore/server.js",
+    "ae-client": "node ae-explore/client.js",
+    "ads-poc": "node ads-poc/simulate-ge-css.js",
+    "viega-poc": "node viega-poc/viega-poc.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "node-opcua": "^2.169.0"
+  },
+  "overrides": {
+    "hexy": "0.3.5"
+  }
+}
