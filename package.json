@@ -7,7 +7,8 @@
     "ae-server": "node ae-explore/server.js",
     "ae-client": "node ae-explore/client.js",
     "ads-poc": "node ads-poc/simulate-ge-css.js",
-    "viega-poc": "node viega-poc/viega-poc.js"
+    "viega-poc": "node viega-poc/viega-poc.js",
+    "special-char-test": "node special-char-test/server.js"
   },
   "keywords": [],
   "author": "",
