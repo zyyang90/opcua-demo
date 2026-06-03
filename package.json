@@ -8,6 +8,7 @@
     "ae-client": "node ae-explore/client.js",
     "ads-poc": "node ads-poc/simulate-ge-css.js",
     "viega-poc": "node viega-poc/viega-poc.js",
+    "limit-poc": "node limit-poc/simulate-limit.js",
     "special-char-test": "node special-char-test/server.js"
   },
   "keywords": [],

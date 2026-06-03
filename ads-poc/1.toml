@@ -1,0 +1,47 @@
+# 1.toml — taosX OPC UA 采集配置（示例 / 重建版）
+#
+# 原始 1.toml 丢失，这是一份最小可运行的示例配置，供 simulate-ge-css.js 还原地址空间。
+# 真实场景下该文件由 taosX 采集器导出，nodes 通常有数千条。
+#
+# 关键结构：
+#   connect.ua.endpoint —— 决定仿真服务器的 port 与 resourcePath
+#   collect.ua.nodes    —— 节点列表，每个 id 形如 ns=2;s=<symbol>
+#
+# 节点分类规则（见 simulate-ge-css.js）：
+#   dynamic : 普通测量点          -> 可读 Variable
+#   static  : 元数据后缀属性       -> 附在父变量上（EURange / EngineeringUnits / ...）
+#   alarm   : 含 _OpcuaAlarm 后缀  -> 告警实例（需 --alarms 才实例化）
+
+[connect.ua]
+endpoint = "opc.tcp://127.0.0.1:64121//GeCssOpcUaServer"
+
+[collect.ua]
+nodes = [
+  # ---- 动态布尔位（以 ACK_PB / ALM_PRESENT 等前缀推断为 Boolean）----
+  { id = "ns=2;s=G1.ACK_PB" },
+  { id = "ns=2;s=G1.ALM_PRESENT" },
+  { id = "ns=2;s=G1.LINK_OK" },
+  { id = "ns=2;s=G1.HORN_ON" },
+
+  # ---- 动态测量值（Double）----
+  { id = "ns=2;s=CRM1_SVR.TempVariable0044" },
+  { id = "ns=2;s=CRM1_SVR.TempVariable0045" },
+  { id = "ns=2;s=CRM1_SVR.PressureVariable0001" },
+  { id = "ns=2;s=CRM1_SVR.MajorRevision_R" },
+
+  # ---- 静态元数据（附在上面的父变量上）----
+  { id = "ns=2;s=CRM1_SVR.MajorRevision_R.EURange" },
+  { id = "ns=2;s=CRM1_SVR.MajorRevision_R.EngineeringUnits" },
+  { id = "ns=2;s=CRM1_SVR.TempVariable0044.EURange" },
+  { id = "ns=2;s=CRM1_SVR.TempVariable0044.EngineeringUnits" },
+  { id = "ns=2;s=CRM1_SVR.TempVariable0044.ValuePrecision" },
+
+  # ---- 顶层简单变量 ----
+  { id = "ns=2;s=$User" },
+
+  # ---- 告警实例（含 _OpcuaAlarm 后缀，默认跳过，--alarms 时实例化）----
+  { id = "ns=2;s=G1.Temp_OpcuaAlarm" },
+  { id = "ns=2;s=G1.Temp_OpcuaAlarm.ActiveState" },
+  { id = "ns=2;s=G1.Temp_OpcuaAlarm.AckedState" },
+  { id = "ns=2;s=CRM1_SVR.Pressure_OpcuaAlarm" },
+]
