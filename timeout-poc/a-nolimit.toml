@@ -1,0 +1,20 @@
+opc_type = "opcua"
+debug = true
+
+[connect.ua]
+endpoint = "opc.tcp://127.0.0.1:4840"
+connect_timeout = 10
+request_timeout = 3
+security_policy = "None"
+security_mode = "None"
+auth_method = "anonymous"
+# 显式放宽封顶(配成与服务器上报值一样大 = 等于不封顶),用于在已修复的 taosx 上仍复现超时。
+max_nodes_per_read = 65536
+max_nodes_per_browse = 65536
+
+[points]
+regex = ".*"
+
+[points.ua]
+root = "i=85"
+namespaces = [2]

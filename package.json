@@ -9,6 +9,7 @@
     "ads-poc": "node ads-poc/simulate-ge-css.js",
     "viega-poc": "node viega-poc/viega-poc.js",
     "limit-poc": "node limit-poc/simulate-limit.js",
+    "timeout-poc": "node timeout-poc/simulate-timeout.js",
     "special-char-test": "node special-char-test/server.js"
   },
   "keywords": [],

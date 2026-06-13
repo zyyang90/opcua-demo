@@ -1,0 +1,20 @@
+opc_type = "opcua"
+debug = true
+
+[connect.ua]
+endpoint = "opc.tcp://127.0.0.1:4840"
+connect_timeout = 10
+request_timeout = 3
+security_policy = "None"
+security_mode = "None"
+auth_method = "anonymous"
+# 修复:用户可配的批次上限。server 上报 65536,这里封顶到 1000,避免巨量单批超时。
+max_nodes_per_read = 1000
+max_nodes_per_browse = 1000
+
+[points]
+regex = ".*"
+
+[points.ua]
+root = "i=85"
+namespaces = [2]
