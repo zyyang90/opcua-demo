@@ -1,4 +1,4 @@
-// quick-client.js - 验证 simulate-ge-css 服务器
+// quick-client.js - 验证 simulate-scada 服务器
 import pkg from "node-opcua";
 const {
   OPCUAClient, AttributeIds, TimestampsToReturn,
@@ -6,7 +6,7 @@ const {
   MessageSecurityMode, SecurityPolicy,
 } = pkg;
 
-const url = process.argv[2] || "opc.tcp://127.0.0.1:64121//GeCssOpcUaServer";
+const url = process.argv[2] || "opc.tcp://127.0.0.1:64121//ScadaOpcUaServer";
 const probes = [
   "ns=2;s=G1.ACK_PB",
   "ns=2;s=G1.ALM_PRESENT",

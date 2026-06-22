@@ -3,14 +3,14 @@
 # macOS 上使用 pfctl 模拟网络断开/恢复
 #
 # 用法：
-#   sudo ./scripts/network-simulate.sh block 192.168.2.139   # 断开到目标 IP 的网络
+#   sudo ./scripts/network-simulate.sh block <target-ip>     # 断开到目标 IP 的网络
 #   sudo ./scripts/network-simulate.sh unblock               # 恢复网络
 #   sudo ./scripts/network-simulate.sh status                 # 查看当前规则
 
 set -e
 
 ACTION=${1:-status}
-TARGET_IP=${2:-192.168.2.139}
+TARGET_IP=${2:-127.0.0.1}
 PF_RULES="/tmp/pf-taosx-test.conf"
 
 case "$ACTION" in
@@ -45,7 +45,7 @@ case "$ACTION" in
     echo "用法: sudo $0 {block|unblock|status} [target_ip]"
     echo ""
     echo "示例:"
-    echo "  sudo $0 block 192.168.2.139    # 断开网络"
+    echo "  sudo $0 block <target-ip>      # 断开网络"
     echo "  sudo $0 unblock                # 恢复网络"
     echo "  sudo $0 status                 # 查看状态"
     exit 1

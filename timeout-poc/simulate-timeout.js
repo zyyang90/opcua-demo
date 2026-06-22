@@ -1,5 +1,5 @@
 // simulate-timeout.js
-// OPC UA 模拟服务器 —— 复现 taosx-opc `points` 命令在 iFIX OPC UA Server 上的两个报错：
+// OPC UA 模拟服务器 —— 复现 taosx-opc `points` 命令在某第三方 OPC UA Server 上的两个报错：
 //
 //   报错① StatusBadLicenseLimitsExceeded (0x810F0000) —— Connect 阶段被拒
 //   报错② StatusBadTimeout            (0x800A0000) —— get points properties / browse 超时
@@ -12,7 +12,7 @@
 //      使巨量单批请求超过客户端 request_timeout → 客户端报 StatusBadTimeout。
 //      修复后 taosx 给上报值封顶（批次变小），同样的延迟下不再超时。
 //   3) 通过 --license-max 限制会话数，超限时在 CreateSession 阶段直接返回
-//      BadLicenseLimitsExceeded（与 iFIX license 限制行为一致）。
+//      BadLicenseLimitsExceeded（与现场 license 限制行为一致）。
 //
 // 用法：
 //   node simulate-timeout.js [--port 4840] [--path ""]
@@ -67,7 +67,7 @@ const server = new OPCUAServer({
     manufacturerName: "taosx-test",
   },
   serverCapabilities: {
-    // 复现现场 iFIX 上报的虚高值
+    // 复现现场第三方 OPC UA Server 上报的虚高值
     operationLimits: {
       maxNodesPerRead: 65536,
       maxNodesPerBrowse: 65536,

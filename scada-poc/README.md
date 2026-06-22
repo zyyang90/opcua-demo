@@ -1,6 +1,6 @@
-# ads-poc — GE Cimplicity (CSS) OPC UA 仿真服务器
+# scada-poc — 第三方 SCADA OPC UA 仿真服务器
 
-基于一份 **taosX OPC UA 采集 TOML 配置**，用 [node-opcua](https://github.com/node-opcua/node-opcua) 还原一个与真实 **GE CSS OPC UA Server** 等价的仿真服务器，用于 PoC 联调（OPC UA 仿真器 → taosx-agent → taosx → TDengine）。
+基于一份 **taosX OPC UA 采集 TOML 配置**，用 [node-opcua](https://github.com/node-opcua/node-opcua) 还原一个与真实 **第三方 SCADA OPC UA Server** 等价的仿真服务器，用于 PoC 联调（OPC UA 仿真器 → taosx-agent → taosx → TDengine）。
 
 服务器会从 TOML 中的 `collect.ua.nodes` 列表派生整个地址空间（数千个节点），并按周期刷新动态测量值，供采集端订阅 / 读取。
 
@@ -8,7 +8,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| `simulate-ge-css.js` | 主程序：解析 TOML，构建地址空间并启动 OPC UA Server |
+| `simulate-scada.js` | 主程序：解析 TOML，构建地址空间并启动 OPC UA Server |
 | `quick-client.js`    | 验证客户端：连接服务器、读取若干探针节点并订阅一个动态值 |
 
 > 依赖统一在仓库根 `package.json`，本目录无独立 `package.json`。先在仓库根执行 `npm install`。
@@ -19,18 +19,18 @@
 # 仓库根目录
 npm install
 
-# 启动仿真服务器（默认读取 ads-poc/1.toml）
-npm run ads-poc
-# 等价于：node ads-poc/simulate-ge-css.js
+# 启动仿真服务器（默认读取 scada-poc/1.toml）
+npm run scada-poc
+# 等价于：node scada-poc/simulate-scada.js
 
 # 另开一个终端，运行验证客户端
-node ads-poc/quick-client.js
+node scada-poc/quick-client.js
 ```
 
 ## 用法
 
 ```bash
-node ads-poc/simulate-ge-css.js [path/to/config.toml] [--port 64121] [--path //GeCssOpcUaServer] [--alarms]
+node scada-poc/simulate-scada.js [path/to/config.toml] [--port 64121] [--path //ScadaOpcUaServer] [--alarms]
 ```
 
 参数：
@@ -39,11 +39,11 @@ node ads-poc/simulate-ge-css.js [path/to/config.toml] [--port 64121] [--path //G
 |------|------|--------|
 | `[config.toml]` | taosX 采集配置文件路径（位置参数） | 同目录下 `1.toml` |
 | `--port <n>`    | 监听端口 | `64121` |
-| `--path <p>`    | OPC UA resourcePath | `//GeCssOpcUaServer` |
+| `--path <p>`    | OPC UA resourcePath | `//ScadaOpcUaServer` |
 | `--alarms`      | 启用告警实例（见下文「告警」说明） | 关闭 |
 
 **端口 / 路径优先级**：CLI 参数 > TOML 中 `connect.ua.endpoint` 解析 > 默认值。
-例如 `endpoint = "opc.tcp://192.168.201.205:64121//GeCssOpcUaServer"` 会被自动解析出 `port=64121`、`resourcePath=//GeCssOpcUaServer`。
+例如 `endpoint = "opc.tcp://<server-ip>:64121//ScadaOpcUaServer"` 会被自动解析出 `port=64121`、`resourcePath=//ScadaOpcUaServer`。
 
 > TOML 解析具备容错能力：当文件末尾被截断或拼接了残片时，会逐行裁剪末尾后重试，最多 50 次。
 
@@ -78,7 +78,7 @@ node ads-poc/simulate-ge-css.js [path/to/config.toml] [--port 64121] [--path //G
 ## 验证
 
 ```bash
-node ads-poc/quick-client.js [opc.tcp://127.0.0.1:64121//GeCssOpcUaServer]
+node scada-poc/quick-client.js [opc.tcp://127.0.0.1:64121//ScadaOpcUaServer]
 ```
 
 客户端会：

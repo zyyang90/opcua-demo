@@ -1,6 +1,6 @@
 // server.js
 // OPC UA 模拟服务器 —— 用于复现 description 中包含特殊字符导致的问题
-// 飞书项目: https://project.feishu.cn/taosdata_td/defect/detail/6995142330
+// 内部缺陷单（单号与链接已脱敏）
 //
 // 用法：
 //   node special-char-test/server.js [--port 4840] [--path /UA/SpecialCharTest]

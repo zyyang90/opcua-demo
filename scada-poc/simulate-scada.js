@@ -1,11 +1,11 @@
-// simulate-ge-css.js
+// simulate-scada.js
 // 基于一份 taosX OPCUA 采集 toml 配置（如 1.toml），
-// 用 node-opcua 还原一个与 GE CSS OPC UA Server 等价的仿真服务器。
+// 用 node-opcua 还原一个与第三方 SCADA OPC UA Server 等价的仿真服务器。
 //
 // 用法：
-//   node simulate-ge-css.js [path/to/1.toml] [--port 64121] [--path //GeCssOpcUaServer]
+//   node simulate-scada.js [path/to/1.toml] [--port 64121] [--path //ScadaOpcUaServer]
 //
-// 默认读取同目录下 1.toml；端口/路径优先级：CLI > toml 中 endpoint 解析 > 默认 64121 + //GeCssOpcUaServer
+// 默认读取同目录下 1.toml；端口/路径优先级：CLI > toml 中 endpoint 解析 > 默认 64121 + //ScadaOpcUaServer
 
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
@@ -68,9 +68,9 @@ const cfg = loadTomlTolerant(cfgPath);
 const nodes = cfg?.collect?.ua?.nodes ?? [];
 console.log(`[load] ${nodes.length} nodes from ${cfgPath}`);
 
-// 从 endpoint 解析端口和 resourcePath（如 opc.tcp://192.168.201.205:64121//GeCssOpcUaServer）
+// 从 endpoint 解析端口和 resourcePath（如 opc.tcp://<server-ip>:64121//ScadaOpcUaServer）
 let port = 64121;
-let resourcePath = "//GeCssOpcUaServer";
+let resourcePath = "//ScadaOpcUaServer";
 const ep = cfg?.connect?.ua?.endpoint;
 if (ep) {
   const m = /^opc\.tcp:\/\/[^:/]+(?::(\d+))?(\/[^\s]*)?$/.exec(ep);
@@ -137,7 +137,7 @@ const server = new OPCUAServer({
   port,
   resourcePath,
   buildInfo: {
-    productName: "GeCssOpcUaServer (sim)",
+    productName: "ScadaOpcUaServer (sim)",
     manufacturerName: "node-opcua simulator",
   },
   serverCapabilities: {
@@ -147,7 +147,7 @@ const server = new OPCUAServer({
 });
 await server.initialize();
 const addressSpace = server.engine.addressSpace;
-const ns = addressSpace.registerNamespace("urn:GeCss:simulator"); // -> ns=2
+const ns = addressSpace.registerNamespace("urn:scada:simulator"); // -> ns=2
 const objects = addressSpace.rootFolder.objects;
 const serverObject = objects.server;
 

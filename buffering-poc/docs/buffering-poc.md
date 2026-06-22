@@ -1,8 +1,8 @@
-# Viega PoC — OPC UA 断链缓存验证
+# OPC UA 断链缓存验证 PoC
 
 ## 客户背景
 
-**客户**：Viega（德国管道系统制造商）
+**客户**：某制造业客户（具体名称已脱敏）
 
 **部署架构**：
 
@@ -23,20 +23,20 @@
 
 ## 模拟程序说明
 
-### 文件：`viega-poc.js`
+### 文件：`buffering-poc.js`
 
 **语言/框架**：Node.js + [node-opcua](https://github.com/node-opcua/node-opcua) v2.169+
 
-**功能**：模拟 Viega 工厂侧的 OPC UA Server
+**功能**：模拟客户工厂侧的 OPC UA Server
 
 **运行方式**：
 
 ```bash
 # 使用默认参数（10000 点位，1秒间隔，端口 4840）
-node viega-poc/viega-poc.js
+node buffering-poc/buffering-poc.js
 
 # 自定义参数
-node viega-poc/viega-poc.js --port 4840 --points 10000 --interval 1000 --log-dir ./logs
+node buffering-poc/buffering-poc.js --port 4840 --points 10000 --interval 1000 --log-dir ./logs
 ```
 
 ### 主要逻辑
@@ -58,7 +58,7 @@ node viega-poc/viega-poc.js --port 4840 --points 10000 --interval 1000 --log-dir
 
 | 设计点 | 原因 |
 |--------|------|
-| 10000 点位 | 匹配 Viega 实际 OPC UA Server 的数据规模 |
+| 10000 点位 | 匹配客户实际 OPC UA Server 的数据规模 |
 | 1 秒更新间隔 | 匹配客户实际采集频率 |
 | 递增序列号 | 便于检测数据是否有缺失、重复或乱序 |
 | 正弦波 + 噪声 | 模拟真实传感器数据特征，非恒定值 |
@@ -70,7 +70,7 @@ node viega-poc/viega-poc.js --port 4840 --points 10000 --interval 1000 --log-dir
 ### 前置依赖
 
 ```bash
-cd /Users/yangzy/workspace/opcua-demo
+cd <project-root>
 npm install   # 安装 node-opcua 等依赖（顶层共享）
 ```
 
@@ -78,10 +78,10 @@ npm install   # 安装 node-opcua 等依赖（顶层共享）
 
 ```bash
 # 默认参数：10000 点位，1 秒间隔，端口 4840
-node viega-poc/viega-poc.js
+node buffering-poc/buffering-poc.js
 
 # 自定义（例如 100 个点位用于快速调试）
-node viega-poc/viega-poc.js --points 100 --interval 1000
+node buffering-poc/buffering-poc.js --points 100 --interval 1000
 ```
 
 启动成功后会输出：
@@ -93,7 +93,7 @@ node viega-poc/viega-poc.js --points 100 --interval 1000
   Endpoint : opc.tcp://xxx:4840/UA/BufferingTest
   Points   : 10000
   Interval : 1000ms
-  Log file : /Users/yangzy/workspace/opcua-demo/logs/buffering-test-2026-05-12T...csv
+  Log file : <project-root>/logs/buffering-test-2026-05-12T...csv
   Node IDs : ns=2;s=seq, ns=2;s=point_0 ~ ns=2;s=point_9999
 ========================================
 ```
@@ -149,7 +149,7 @@ SELECT * FROM <database>.<stable> ORDER BY ts DESC LIMIT 10;
 # 参数：CSV日志路径、TDengine地址、数据库名、超级表名
 node verify-data.js \
   --csv ./logs/buffering-test-2026-05-12T....csv \
-  --host 192.168.2.139 \
+  --host <taosx-host-ip> \
   --port 6041 \
   --db test_opcua \
   --stable buffering_test
@@ -177,13 +177,13 @@ TDengine 行数: 480
 
 | 角色 | 设备 | 组件 |
 |------|------|------|
-| 数据中心 | 192.168.2.139 | taosx + TDengine TSDB |
-| 工厂侧 | 本地 Mac | taosx-agent + viega-poc.js |
+| 数据中心 | <taosx-host-ip> | taosx + TDengine TSDB |
+| 工厂侧 | 本地 Mac | taosx-agent + buffering-poc.js |
 
 ## 相关文档
 
-- 飞书测试报告：https://taosdata.feishu.cn/wiki/Xycew8IjSi5EyAkN709c1hNinvh
-- 飞书会议记录（需求来源）：https://taosdata.feishu.cn/wiki/TnnkwlWPYivoR9kXkVpccuunnie
+- 内部测试报告（链接已脱敏）
+- 需求来源会议记录（链接已脱敏）
 
 ## 当前结论（基于代码分析）
 

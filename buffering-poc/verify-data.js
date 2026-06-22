@@ -3,7 +3,7 @@
 //
 // 用法：
 //   node verify-data.js --csv ./logs/buffering-test-xxx.csv \
-//                       --host 192.168.2.139 --port 6041 \
+//                       --host <taosx-host-ip> --port 6041 \
 //                       --db test_buffering --stable opc_data
 //
 // 功能：
@@ -17,7 +17,7 @@ import { readFileSync } from "node:fs";
 // ---------- 解析参数 ----------
 const argv = process.argv.slice(2);
 let csvPath = "";
-let host = "192.168.2.139";
+let host = "127.0.0.1";
 let port = 6041;
 let user = "root";
 let password = "taosdata";

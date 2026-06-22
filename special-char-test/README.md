@@ -2,7 +2,7 @@
 
 ## 背景
 
-复现飞书项目缺陷：[#6995142330](https://project.feishu.cn/taosdata_td/defect/detail/6995142330)
+复现内部缺陷单（单号与链接已脱敏）
 
 问题现象：当 OPC UA 点位的 `description` 字段包含特殊 Unicode 字符（如 °C、Ω、µ 等）时，taosx/taosx-agent 在采集或写入 TDengine 过程中可能出现异常。
 
@@ -26,14 +26,14 @@
 
 ### 检查端口占用
 
-本机可能已有其他 OPC UA 模拟器在运行（如 ae-explore、viega-poc 等），默认都使用 4840 端口。启动前先检查：
+本机可能已有其他 OPC UA 模拟器在运行（如 ae-explore、buffering-poc 等），默认都使用 4840 端口。启动前先检查：
 
 ```bash
 # 检查 4840 端口是否被占用
 lsof -i :4840
 
 # 查看所有正在运行的 OPC UA 相关 node 进程
-ps aux | grep -E 'node.*(viega-poc|simulate-ge-css|ae-explore|special-char)' | grep -v grep
+ps aux | grep -E 'node.*(buffering-poc|simulate-scada|ae-explore|special-char)' | grep -v grep
 ```
 
 如果端口已被占用，有两种处理方式：
